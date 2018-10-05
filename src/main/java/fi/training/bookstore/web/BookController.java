@@ -16,37 +16,35 @@ import fi.training.bookstore.domain.Book;
 import fi.training.bookstore.domain.BookRepository;
 
 @Controller
-public class BookConroller {
+public class BookController {
 	@Autowired
 	private BookRepository repository; 
 	
 	@Autowired
 	private CategoryRepository crepository;
 	
-	@RequestMapping(value="/book", method=RequestMethod.GET)
-    public String greetingForm(Model model) {
-        model.addAttribute("book", new Book());
-        return "book";
-    }
+	//tarkista tämä
+	@RequestMapping(value="/login")
+	public String login() {	
+	    return "login";
+	}	
 	
      @RequestMapping(value="/booklist")
      public String bookList(Model model) {	
      model.addAttribute("books", repository.findAll());
          return "booklist";   
     }
-     
-  // RESTful 
-     @RequestMapping(value="/books", method = RequestMethod.GET)
+
+     @RequestMapping(value="/books")
      public @ResponseBody List<Book> bookListRest() {	
          return (List<Book>) repository.findAll();
      }    
      
-  // RESTful service to get book by id
      @RequestMapping(value="/book/{id}", method = RequestMethod.GET)
      public @ResponseBody Optional<Book> findBookRest(@PathVariable("id") Long bookId) {	
      	return repository.findById(bookId);
      }     
-     
+     //@PreAuthorize("hasAuthority('ADMIN')")
 	 @RequestMapping(value = "/add")
 	    public String addBook(Model model){
 	    	model.addAttribute("book", new Book());
@@ -54,7 +52,7 @@ public class BookConroller {
 	    //mennään addbook html sivulle   ? Pitääkö tämä olla vain return: book 
 	    	return "addbook";
 	    }   
-	 
+     
 	 @RequestMapping(value = "/save", method = RequestMethod.POST)
 	    public String save(Book book){
 	        repository.save(book);
@@ -66,6 +64,16 @@ public class BookConroller {
 	    	repository.deleteById(bookId);
 	        return "redirect:../booklist";
 	    }  
+	    
+	   // @RequestMapping(value="/book", method=RequestMethod.GET)
+	    //public String greetingForm(Model model) {
+	        //model.addAttribute("book", new Book());
+	        //return "book";
+	    //}
+	    
+	   
+		 
+	    
 	    //@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
 	    //public String updateBook(@PathVariable("id") Long Id, Model model) {
 	   // 	Book book = repository.findById(id).get();
